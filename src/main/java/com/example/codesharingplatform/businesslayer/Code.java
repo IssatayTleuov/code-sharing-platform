@@ -11,5 +11,5 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Code {
     private String code;
-    private LocalDateTime date;
+    private String date;
 }

@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Code</title>
+    <link rel="stylesheet" href="css/code.css">
 </head>
 <body>
-<pre id="code_snippet">
-    <span id="load_date" th:utext="${date}"></span>
-    <br>
-    <p th:utext="${code}"></p>
-</pre>
+<span id="load_date" th:utext="${date}"></span>
+<pre id="code_snippet" th:utext="${code}"></pre>
 </body>
 </html>
