@@ -35,16 +35,16 @@ public class CodeController {
 
     @PostMapping("/api/code/new")
     @ResponseBody
-    public List<String> createCodeJSON(@RequestBody Code code) {
+    public String createCodeJSON(@RequestBody Code code) {
         this.code = code;
         this.code.setDate(LocalDateTime.now().format(formatter));
         System.out.printf("\n\ncreateCodeJSON code: %s," +
                 "date: %s", code.getCode(), code.getDate());
-        return Collections.emptyList();
+        return "{}";
     }
 
     @GetMapping("/code/new")
     public String createCodeHTML() {
-        return "new_code.html";
+        return "create_code.html";
     }
 }
