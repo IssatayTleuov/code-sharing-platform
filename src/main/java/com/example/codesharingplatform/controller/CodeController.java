@@ -20,7 +20,7 @@ import java.util.*;
 public class CodeController {
 
     private final CodeService codeService;
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss");
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm:ss");
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CodeController.class);
 
@@ -44,19 +44,25 @@ public class CodeController {
     public String getCodeByIdHTML(@PathVariable int id, Model model) {
         Optional<Code> code = codeService.getCodeById(id);
         if (code.isPresent()) {
-            model.addAttribute("codes", List.of(code.get()));
-            return "code";
+            model.addAttribute("date", code.get().getDate());
+            model.addAttribute("code", code.get().getCode());
+            return "get_code";
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping("/api/code/new")
-    public ResponseEntity<Map<String, Integer>> postCode(@RequestBody Code code) {
+    public ResponseEntity<Map<String, String>> postCodeJSON(@RequestBody Code code) {
         code.setDate(LocalDateTime.now().format(dateTimeFormatter));
         int id = codeService.postCode(code);
         LOGGER.info("Posted code: {}, {}", code.getCode(), code.getDate());
-        return ResponseEntity.ok(Map.of("id", id));
+        return ResponseEntity.ok(Map.of("id", String.valueOf(id)));
+    }
+
+    @GetMapping ("/code/new")
+    public String postCodeHTML() {
+        return "new_code";
     }
 
     @GetMapping("/api/code/latest")
@@ -64,26 +70,18 @@ public class CodeController {
     public ResponseEntity<List<Code>> getCodesJSON() {
         Optional<List<Code>> optionalCodes = Optional.of(codeService.getCodes());
         List<Code> codes = optionalCodes.get();
-        if (optionalCodes.isPresent()) {
-            Collections.reverse(codes);
-            LOGGER.info("Code list: {}", codes.toString());
-            return ResponseEntity.ok(codes);
-        } else {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Map is empty");
-        }
+        Collections.reverse(codes);
+        LOGGER.info("Code list: {}", codes.toString());
+        return ResponseEntity.ok(codes);
     }
 
     @GetMapping("code/latest")
     public String getCodesHTML(Model model) {
         Optional<List<Code>> optionalCodes = Optional.of(codeService.getCodes());
         List<Code> codes = optionalCodes.get();
-        if (optionalCodes.isPresent()) {
-            Collections.reverse(codes);
-            LOGGER.info("Code list: {}", codes.toString());
-            model.addAttribute("codes", codes);
-            return "code";
-        } else {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Map is empty");
-        }
+        Collections.reverse(codes);
+        LOGGER.info("Code list: {}", codes.toString());
+        model.addAttribute("codes", codes);
+        return "latest_code";
     }
 }

@@ -4,24 +4,24 @@
     <meta charset="utf-8">
     <title>Code</title>
     <style>
-        p {
+        span {
             color: green;
         }
 
         pre {
-            border: 2px black solid;
-            background-color: gray;
+            background-color: lightgrey;
+            border: 2px solid grey;
             height: 100px;
             width: 500px;
+        }
+
+        #load_date {
+            font-family: "Courier New", monospace;
         }
     </style>
 </head>
 <body>
-<#list codes as code>
-<div>
-    <p>${code.date}</p>
-    <pre>${code.code}</pre>
-</div>
-</#list>
+<span id="load_date" >${date}</span>
+<pre id="code_snippet">${code}</pre>
 </body>
 </html>

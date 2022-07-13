@@ -35,10 +35,12 @@ public class CodeService {
 
     public static ArrayList<Code> populateList(int mapSize, TreeMap<Integer, Code> codeMap) {
         ArrayList<Code> codes = new ArrayList<>();
-        if (mapSize < 10) {
+        if (mapSize <= 10) {
             codeMap.forEach((integer, code) -> codes.add(code));
         } else {
-            SortedMap<Integer, Code> subMap = codeMap.subMap(codeMap.size() - 1, codeMap.size() - 11);
+            int start = codeMap.size() - 9;
+            int end = codeMap.size() + 1;
+            SortedMap<Integer, Code> subMap = codeMap.subMap(start, end);
             subMap.forEach((integer, code) -> codes.add(code));
         }
         return codes;
