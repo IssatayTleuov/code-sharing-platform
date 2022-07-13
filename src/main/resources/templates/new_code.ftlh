@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Create</title>
     <style>
+        <#--TODO #2 Move to external css file-->
         textarea {
             width: 500px;
             height: 100px;
@@ -16,6 +17,7 @@
 <br>
 <button id="send_snippet" type="submit" onclick="send()">Submit</button>
 <script>
+    <#--TODO Move to external js file-->
     function send() {
         let object = {
             "code": document.getElementById("code_snippet").value

@@ -38,6 +38,7 @@ public class CodeService {
         if (mapSize <= 10) {
             codeMap.forEach((integer, code) -> codes.add(code));
         } else {
+            //TODO Remove start and end variables
             int start = codeMap.size() - 9;
             int end = codeMap.size() + 1;
             SortedMap<Integer, Code> subMap = codeMap.subMap(start, end);

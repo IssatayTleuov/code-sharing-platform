@@ -37,6 +37,8 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
+
+<!-- TODO Add dev-tool to reload html pages online -->
     </dependencies>
 
     <build>

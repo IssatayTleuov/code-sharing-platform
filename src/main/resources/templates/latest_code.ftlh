@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Code</title>
     <style>
+        <#--TODO #3 Move to external css file-->
         span {
             color: green;
         }
