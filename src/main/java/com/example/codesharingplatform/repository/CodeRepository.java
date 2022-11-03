@@ -1,30 +1,46 @@
 package com.example.codesharingplatform.repository;
 
 import com.example.codesharingplatform.model.Code;
-import org.springframework.stereotype.Component;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.TreeMap;
+import java.util.Optional;
 
-@Component
-public class CodeRepository {
+@Repository
+public interface CodeRepository extends CrudRepository<Code, Long> {
+    @Override
+    <S extends Code> S save(S entity);
 
-    private int id = 0;
-    private TreeMap<Integer, Code> codeMap = new TreeMap<>();
+    @Override
+    <S extends Code> Iterable<S> saveAll(Iterable<S> entities);
 
-    public TreeMap<Integer, Code> getCodeMap() {
-        return codeMap;
-    }
+    @Override
+    Optional<Code> findById(Long aLong);
 
-    public void setCodeMap(int id, Code code) {
-        this.codeMap.put(id, code);
-    }
+    @Override
+    boolean existsById(Long aLong);
 
-    public int getId() {
-        return id;
-    }
+    @Override
+    Iterable<Code> findAll();
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    @Override
+    Iterable<Code> findAllById(Iterable<Long> longs);
+
+    @Override
+    long count();
+
+    @Override
+    void deleteById(Long aLong);
+
+    @Override
+    void delete(Code entity);
+
+    @Override
+    void deleteAllById(Iterable<? extends Long> longs);
+
+    @Override
+    void deleteAll(Iterable<? extends Code> entities);
+
+    @Override
+    void deleteAll();
 }

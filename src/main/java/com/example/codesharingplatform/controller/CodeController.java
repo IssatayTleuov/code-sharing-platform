@@ -2,6 +2,9 @@ package com.example.codesharingplatform.controller;
 
 import com.example.codesharingplatform.model.Code;
 import com.example.codesharingplatform.service.CodeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +19,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-//TODO add swagger
 @Controller
+@Tag(name = "Code Controller", description = "Endpoints to work with code")
 public class CodeController {
 
     private final CodeService codeService;
@@ -29,9 +32,11 @@ public class CodeController {
         this.codeService = codeService;
     }
 
-    @GetMapping("api/code/{id}")
     @ResponseBody
-    public ResponseEntity<Code> getCodeByIdJSON(@PathVariable int id) {
+    @GetMapping("/api/code/{id}")
+    @Operation(description = "Get code by ID as JSON")
+    public ResponseEntity<Code> getCodeByIdJSON(@PathVariable
+                                                @Parameter(description = "Code id") Long id) {
         Optional<Code> code = codeService.getCodeById(id);
         if (code.isPresent()) {
             LOGGER.info("Code: {}", code.get());
@@ -41,8 +46,10 @@ public class CodeController {
         }
     }
 
-    @GetMapping("code/{id}")
-    public String getCodeByIdHTML(@PathVariable int id, Model model) {
+    @GetMapping("/code/{id}")
+    @Operation(description = "Get code by ID as HTML page")
+    public String getCodeByIdHTML(@PathVariable
+                                  @Parameter(description = "Code id") Long id, Model model) {
         Optional<Code> code = codeService.getCodeById(id);
         if (code.isPresent()) {
             model.addAttribute("date", code.get().getDate());
@@ -54,34 +61,38 @@ public class CodeController {
     }
 
     @PostMapping("/api/code/new")
+    @Operation(description = "Add code to platform by JSON")
     public ResponseEntity<Map<String, String>> postCodeJSON(@RequestBody Code code) {
         code.setDate(LocalDateTime.now().format(dateTimeFormatter));
-        int id = codeService.postCode(code);
+        Long id = codeService.postCode(code);
         LOGGER.info("Posted code: {}, {}", code.getCode(), code.getDate());
         return ResponseEntity.ok(Map.of("id", String.valueOf(id)));
     }
 
     @GetMapping ("/code/new")
+    @Operation(description = "Add code to platform on HTML page")
     public String postCodeHTML() {
         return "new_code";
     }
 
     @GetMapping("/api/code/latest")
     @ResponseBody
+    @Operation(description = "Get latest committed code as JSON")
     public ResponseEntity<List<Code>> getCodesJSON() {
         Optional<List<Code>> optionalCodes = Optional.of(codeService.getCodes());
         List<Code> codes = optionalCodes.get();
         Collections.reverse(codes);
-        LOGGER.info("Code list: {}", codes.toString());
+        LOGGER.info("Code list: {}", codes);
         return ResponseEntity.ok(codes);
     }
 
-    @GetMapping("code/latest")
+    @GetMapping("/code/latest")
+    @Operation(description = "Get latest committed code on HTML page")
     public String getCodesHTML(Model model) {
         Optional<List<Code>> optionalCodes = Optional.of(codeService.getCodes());
         List<Code> codes = optionalCodes.get();
         Collections.reverse(codes);
-        LOGGER.info("Code list: {}", codes.toString());
+        LOGGER.info("Code list: {}", codes);
         model.addAttribute("codes", codes);
         return "latest_code";
     }
