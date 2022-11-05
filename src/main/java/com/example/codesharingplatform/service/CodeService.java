@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class CodeService {
@@ -26,9 +27,9 @@ public class CodeService {
     }
 
     public List<Code> getCodes() {
-        List<Code> codes = new ArrayList<>();
-        codeRepository.findAll().forEach(codes::add);
-        return codes;
+        List<Code> codes = (List<Code>) codeRepository.findAll();
+        Collections.reverse(codes);
+        return codes.stream().limit(10).collect(Collectors.toList());
     }
 
     @Deprecated

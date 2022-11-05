@@ -79,9 +79,7 @@ public class CodeController {
     @ResponseBody
     @Operation(description = "Get latest committed code as JSON")
     public ResponseEntity<List<Code>> getCodesJSON() {
-        Optional<List<Code>> optionalCodes = Optional.of(codeService.getCodes());
-        List<Code> codes = optionalCodes.get();
-        Collections.reverse(codes);
+        List<Code> codes = codeService.getCodes();
         LOGGER.info("Code list: {}", codes);
         return ResponseEntity.ok(codes);
     }
@@ -89,9 +87,7 @@ public class CodeController {
     @GetMapping("/code/latest")
     @Operation(description = "Get latest committed code on HTML page")
     public String getCodesHTML(Model model) {
-        Optional<List<Code>> optionalCodes = Optional.of(codeService.getCodes());
-        List<Code> codes = optionalCodes.get();
-        Collections.reverse(codes);
+        List<Code> codes = codeService.getCodes();
         LOGGER.info("Code list: {}", codes);
         model.addAttribute("codes", codes);
         return "latest_code";
