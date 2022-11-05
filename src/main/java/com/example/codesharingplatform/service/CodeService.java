@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class CodeService {
@@ -16,32 +17,28 @@ public class CodeService {
         this.codeRepository = codeRepository;
     }
 
-    public Optional<Code> getCodeById(int id) {
-        return Optional. of(codeRepository.getCodeMap().get(id));
+    public Optional<Code> getCodeById(Long id) {
+        return codeRepository.findById(id);
     }
 
-    public int postCode(Code code) {
-        int id = codeRepository.getId() + 1;
-        codeRepository.setCodeMap(id, code);
-        codeRepository.setId(id);
-        return id;
+    public Long postCode(Code code) {
+        codeRepository.save(code);
+        return code.getId();
     }
 
     public List<Code> getCodes() {
-        int mapSize = codeRepository.getCodeMap().size();
-        return populateList(mapSize, codeRepository.getCodeMap());
-
+        List<Code> codes = (List<Code>) codeRepository.findAll();
+        Collections.reverse(codes);
+        return codes.stream().limit(10).collect(Collectors.toList());
     }
 
+    @Deprecated
     public static ArrayList<Code> populateList(int mapSize, TreeMap<Integer, Code> codeMap) {
         ArrayList<Code> codes = new ArrayList<>();
         if (mapSize <= 10) {
             codeMap.forEach((integer, code) -> codes.add(code));
         } else {
-            //TODO Remove start and end variables
-            int start = codeMap.size() - 9;
-            int end = codeMap.size() + 1;
-            SortedMap<Integer, Code> subMap = codeMap.subMap(start, end);
+            SortedMap<Integer, Code> subMap = codeMap.subMap(codeMap.size() - 9, codeMap.size() + 1);
             subMap.forEach((integer, code) -> codes.add(code));
         }
         return codes;
