@@ -22,11 +22,10 @@ import java.util.*;
 @Controller
 @Tag(name = "Code Controller", description = "Endpoints to work with code")
 public class CodeController {
-
+//TODO Create openapi configuration file
     private final CodeService codeService;
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm:ss");
-
     private static final Logger LOGGER = LoggerFactory.getLogger(CodeController.class);
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm:ss");
 
     public CodeController(@Autowired CodeService codeService) {
         this.codeService = codeService;
