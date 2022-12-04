@@ -35,7 +35,7 @@ public class CodeController {
     @GetMapping("/api/code/{id}")
     @Operation(description = "Get code by ID as JSON")
     public ResponseEntity<Code> getCodeByIdJSON(@PathVariable
-                                                @Parameter(description = "Code id") Long id) {
+                                                @Parameter(description = "Code id") String id) {
         Optional<Code> code = codeService.getCodeById(id);
         if (code.isPresent()) {
             LOGGER.info("Code: {}", code.get());
@@ -48,7 +48,7 @@ public class CodeController {
     @GetMapping("/code/{id}")
     @Operation(description = "Get code by ID as HTML page")
     public String getCodeByIdHTML(@PathVariable
-                                  @Parameter(description = "Code id") Long id, Model model) {
+                                  @Parameter(description = "Code id") String id, Model model) {
         Optional<Code> code = codeService.getCodeById(id);
         if (code.isPresent()) {
             model.addAttribute("date", code.get().getDate());
@@ -62,10 +62,14 @@ public class CodeController {
     @PostMapping("/api/code/new")
     @Operation(description = "Add code to platform by JSON")
     public ResponseEntity<Map<String, String>> postCodeJSON(@RequestBody Code code) {
-        code.setDate(LocalDateTime.now().format(dateTimeFormatter));
-        Long id = codeService.postCode(code);
-        LOGGER.info("Posted code: {}, {}", code.getCode(), code.getDate());
-        return ResponseEntity.ok(Map.of("id", String.valueOf(id)));
+        try {
+            code.setDate(LocalDateTime.now().format(dateTimeFormatter));
+            String uuid = codeService.postCode(code);
+            return ResponseEntity.ok(Map.of("id", uuid));
+        } catch (Exception e) {
+            LOGGER.error("Error - postCodeJSON. Error msg: {}", e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping ("/code/new")

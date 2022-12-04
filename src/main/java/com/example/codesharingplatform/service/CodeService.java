@@ -17,11 +17,11 @@ public class CodeService {
         this.codeRepository = codeRepository;
     }
 
-    public Optional<Code> getCodeById(Long id) {
+    public Optional<Code> getCodeById(String id) {
         return codeRepository.findById(id);
     }
 
-    public Long postCode(Code code) {
+    public String postCode(Code code) {
         codeRepository.save(code);
         return code.getId();
     }

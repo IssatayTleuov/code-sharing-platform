@@ -1,6 +1,7 @@
 package com.example.codesharingplatform.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
@@ -8,9 +9,10 @@ import javax.persistence.*;
 @Table(name = "codes")
 public class Code {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GenericGenerator(name = "code_id", strategy = "com.example.codesharingplatform.generator.CodeIdGenerator")
+    @GeneratedValue(generator = "code_id")
     @JsonIgnore
-    private long id;
+    private String id;
     @Column(name = "code")
     private String code;
     @Column(name = "date")
@@ -23,11 +25,11 @@ public class Code {
         this.code = code;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
