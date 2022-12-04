@@ -17,6 +17,10 @@ public class Code {
     private String code;
     @Column(name = "date")
     private String date;
+    @Column(name = "time", columnDefinition = "INT COMMENT 'Time in seconds'")
+    private Integer time;
+    @Column(name = "views")
+    private Integer views;
 
     public Code() {
     }
@@ -47,5 +51,21 @@ public class Code {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public Integer getTime() {
+        return time;
+    }
+
+    public void setTime(Integer time) {
+        this.time = time;
+    }
+
+    public Integer getViews() {
+        return views;
+    }
+
+    public void setViews(Integer views) {
+        this.views = views;
     }
 }
